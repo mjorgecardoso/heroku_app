@@ -46,10 +46,10 @@ my_scaler = joblib.load("iris_scaler.pkl")
 # Lots of fields available:
 # http://wtforms.readthedocs.io/en/stable/fields.html
 class FlowerForm(FlaskForm):
-    sep_len = TextField('Parameter 1')
-    sep_wid = TextField('Parameter 2')
-    pet_len = TextField('Parameter 3')
-    pet_wid = TextField('Parameter 4')
+    param1 = TextField('param1')
+    param2 = TextField('param2')
+    param3 = TextField('param3')
+    param4 = TextField('param4')
 
     submit = SubmitField('Predict')
 
