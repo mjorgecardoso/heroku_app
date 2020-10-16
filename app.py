@@ -14,18 +14,18 @@ def return_prediction(model,scaler,sample_json):
     # For larger data features, you should probably write a for loop
     # That builds out this array for you
     
-    s_len = sample_json['sepal_length']
-    s_wid = sample_json['sepal_width']
-    p_len = sample_json['petal_length']
-    p_wid = sample_json['petal_width']
+    p1 = sample_json['param1']
+    p2 = sample_json['param2']
+    p3 = sample_json['param3']
+    p4 = sample_json['param4']
     
-    flower = [[s_len,s_wid,p_len,p_wid]]
+    pjoint = [[p1,p2,p3,p4]]
     
-    flower = scaler.transform(flower)
+    pjoint = scaler.transform(pjoint)
     
-    classes = np.array(['setosa', 'versicolor', 'virginica'])
+    classes = np.array(['Healthy', 'Non-Covid ILI', 'COVID'])
     
-    class_ind = model.predict_classes(flower)
+    class_ind = model.predict_classes(pjoint)
     
     return classes[class_ind][0]
 
@@ -38,20 +38,20 @@ app.config['SECRET_KEY'] = 'someRandomKey'
 
 
 # REMEMBER TO LOAD THE MODEL AND THE SCALER!
-flower_model = load_model("final_iris_model.h5")
-flower_scaler = joblib.load("iris_scaler.pkl")
+my_model = load_model("final_iris_model.h5")
+my_scaler = joblib.load("iris_scaler.pkl")
 
 
 # Now create a WTForm Class
 # Lots of fields available:
 # http://wtforms.readthedocs.io/en/stable/fields.html
 class FlowerForm(FlaskForm):
-    sep_len = TextField('Sepal Length')
-    sep_wid = TextField('Sepal Width')
-    pet_len = TextField('Petal Length')
-    pet_wid = TextField('Petal Width')
+    sep_len = TextField('Parameter 1')
+    sep_wid = TextField('Parameter 2')
+    pet_len = TextField('Parameter 3')
+    pet_wid = TextField('Parameter 4')
 
-    submit = SubmitField('Analyze')
+    submit = SubmitField('Predict')
 
 
 
@@ -64,10 +64,10 @@ def index():
     if form.validate_on_submit():
         # Grab the data from the breed on the form.
 
-        session['sep_len'] = form.sep_len.data
-        session['sep_wid'] = form.sep_wid.data
-        session['pet_len'] = form.pet_len.data
-        session['pet_wid'] = form.pet_wid.data
+        session['param1'] = form.param1.data
+        session['param2'] = form.param2.data
+        session['param3'] = form.param3.data
+        session['param4'] = form.param4.data
 
         return redirect(url_for("prediction"))
 
@@ -80,12 +80,12 @@ def prediction():
 
     content = {}
 
-    content['sepal_length'] = float(session['sep_len'])
-    content['sepal_width'] = float(session['sep_wid'])
-    content['petal_length'] = float(session['pet_len'])
-    content['petal_width'] = float(session['pet_wid'])
+    content['param1'] = float(session['param1'])
+    content['param2'] = float(session['param2'])
+    content['param3'] = float(session['param3'])
+    content['param4'] = float(session['param4'])
 
-    results = return_prediction(model=flower_model,scaler=flower_scaler,sample_json=content)
+    results = return_prediction(model=my_model,scaler=my_scaler,sample_json=content)
 
     return render_template('prediction.html',results=results)
 
