@@ -3,13 +3,13 @@
 <form  method="POST">
     {# This hidden_tag is a CSRF security feature. #}
     {{ form.hidden_tag() }}
-    {{ form.sep_len.label }} {{form.sep_len}}
+    {{ form.param1.label }} {{form.param1}}
     <br>
-    {{ form.sep_wid.label}} {{form.sep_wid}}
+    {{ form.param2.label}} {{form.param2}}
     <br>
-    {{form.pet_len.label}}{{form.pet_len}}
+    {{form.param3.label}}{{form.param3}}
     <br>
-    {{form.pet_wid.label}}{{form.pet_wid}}
+    {{form.param4.label}}{{form.param4}}
     <br>
     {{ form.submit() }}
 </form>
